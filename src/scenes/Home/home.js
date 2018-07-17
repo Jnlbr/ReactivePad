@@ -4,6 +4,7 @@ import {
 		Button,
 } from 'react-native';
 import styles from './styles';
+import MainList from '../../components/list'
 
 class Home extends Component {
 
@@ -13,6 +14,7 @@ class Home extends Component {
 
 		return (
 			<View>
+				<MainList />
 				<Button
 					title="TO DRAWING PAGE"
 					onPress={this.navigateTo('Sketch')}
