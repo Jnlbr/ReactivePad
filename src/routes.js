@@ -1,12 +1,12 @@
 import { createStackNavigator } from 'react-navigation';
-import { Home, Sketch, EditorScreen } from './scenes';
+import { Home, Draw, EditorScreen } from './scenes';
 
 
 const Routes = createStackNavigator(
   {
     Home: Home,
-    Sketch: Sketch,
-    Editor: EditorScreen,
+    Draw: Draw,
+    Editor: EditorScreen
   }, {
     initialRouteName: 'Home',
   }
