@@ -2,11 +2,12 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 10,
+        marginTop: 15,
         marginLeft: 15,
         marginRight: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        flexWrap:'wrap'
     },
     ball: {
         width: 20,

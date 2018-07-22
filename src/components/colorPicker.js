@@ -21,7 +21,7 @@ class ColorPicker extends Component {
 
    ballStyles = (color,index) => {
       const selectedStyles = (this.props.selected === index) 
-         ? {backgroundColor: color, borderWidth: 3, borderColor: 'black'}
+         ? {backgroundColor: color, borderWidth: 1.5, borderColor: 'black'}
          : {backgroundColor: color}
       return [styles.ball, selectedStyles]
    }

@@ -1,69 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions} from 'react-native';
+import { StyleSheet, Text, View, FlatList, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements'
 import Note from './note';
+import {NotesContext} from '../context';
+import { connect } from 'react-redux';
+import {
+    addNote,
+    deleteNote,
+    editNote
+} from '../actions/notes';
 
+class List extends React.Component {
 
-export default class MainList extends React.Component{
-    constructor(props){
-        super(props);
-        let dummyData = [{title:'a', Text:'hola soy bata', date: new Date().toLocaleString()},{title:'b', Text:'Hola soy Batman', date: new Date().toLocaleString()}];
-        this.state = {dummyData}
-    }
-
-    handleAdd = () =>{
-        this.setState(previousState =>{
-            return {
-                dummyData: [...previousState.dummyData ,{title:'c',Text:'hola soy robin'}]
-            }
-        })
-    }
-
-    handleDelete = (index) =>{
-        this.setState(previousState=>{
-            let newData = previousState.dummyData.slice()
-            newData.splice(index, 1)
-            return{
-                dummyData: newData
-            }
-        })
-    }
-
-    handleEdit = (index, newTitle) =>{
-        this.setState(previousState =>{
-                let newData = previousState.dummyData;
-                newData[index].title = newTitle;
-            return{
-                dummyData: newData
-            }
-        })
-    }
-
-
-
-    render(){
-        return(
-            <View>
-                <Button
-                    icon={{name: 'note-add'}}
-                    onPress={this.handleAdd}
-                />
-                <FlatList
-                    data={this.state.dummyData}
-                    renderItem={({item,index}) => 
-                        <Note
-                            name={item.title}
-                            text={item.Text}
-                            date={item.date}
-                            id={index}
-                            onDelete={this.handleDelete}
-                            onEdit = {this.handleEdit} />
-                    }
-                />
-            </View>
-        );
-    }
+  render(){
+    return (           
+      <View>
+        <FlatList
+          keyExtractor={(item) => item.id}
+          data={this.props.notes}
+          renderItem={({item}) =>
+            <Note
+              note={item}
+              onEdit={() => this.props.handleEdit(item)}
+              onSwipeRight={() => this.props.handleEdit(item)}
+              onDelete={() => this.props.deleteNote(item.id)}
+              onSwipeLeft={() => this.props.deleteNote(item.id)}
+            />
+          }
+        />
+      </View>
+    );
+  }
 }
 
-
-  
+export default List;
