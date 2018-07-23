@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Dimensions, ToastAndroid} from 'react-native';
 import { Button } from 'react-native-elements'
 import Note from './note';
 import {NotesContext} from '../context';
@@ -12,9 +12,17 @@ import {
 
 class List extends React.Component {
 
+deleteFunct = (id) =>{
+  ToastAndroid.showWithGravity(
+    'Deleted Note',
+    ToastAndroid.SHORT,
+    ToastAndroid.CENTER
+    );
+  this.props.deleteNote(id);
+}
   render(){
     return (           
-      <View>
+      <View style={{marginBottom: 5}}>
         <FlatList
           keyExtractor={(item) => item.id}
           data={this.props.notes}
@@ -23,8 +31,8 @@ class List extends React.Component {
               note={item}
               onEdit={() => this.props.handleEdit(item)}
               onSwipeRight={() => this.props.handleEdit(item)}
-              onDelete={() => this.props.deleteNote(item.id)}
-              onSwipeLeft={() => this.props.deleteNote(item.id)}
+              onDelete={() => this.deleteFunct(item.id)}
+              onSwipeLeft={() => this.deleteFunct(item.id)}
             />
           }
         />

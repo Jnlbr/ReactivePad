@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
     case ADD_NOTE:
       return {
         ...state,
-        notes: [{ id: action.id, type: action.noteType }, ...state.notes]
+        notes: [{ id: action.id, type: action.noteType, title: "new note", date: new Date().toLocaleString() }, ...state.notes]
       }
     case DELETE_NOTE:
       return {

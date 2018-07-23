@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import {
 	View,
+	Text,
+	TouchableOpacity,
+	ToastAndroid
 } from 'react-native';
 import { Button } from 'react-native-elements'
-import { List, ModalOption } from '../../components'
+import { List, ModalOption, Overlay} from '../../components'
 import { connect } from 'react-redux';
 import {
 	addNote,
@@ -29,21 +32,21 @@ class Home extends Component {
 		}
 	}
 	handleOption = (option) => {
-		this.setModalVisible(false);
+		ToastAndroid.showWithGravity(
+			'Created Note',
+			ToastAndroid.SHORT,
+			ToastAndroid.CENTER
+		  );
 		this.props.addNote(option);
 	}
 
 	render() {
 		return (
-			<View>
+			<View style={{flex:1}}>
 				<ModalOption 
 					visible={this.state.modalVisible} 
 					handleOption={this.handleOption}
 					closeModal={() => this.setModalVisible(false)}
-				/>
-				<Button
-					icon={{ name: 'note-add' }}
-					onPress={() => this.setModalVisible(true)}
 				/>
 				<List 
 					notes={this.props.notes} 
@@ -51,10 +54,8 @@ class Home extends Component {
 					deleteNote={this.props.deleteNote}
 					handleEdit={this.handleEdit}
 				/>
-				<Button
-					title="TO DRAWING PAGE"
-					onPress={this.navigateTo('Draw')}
-				/>
+				<Overlay
+					handleOption={this.handleOption}/>
 			</View>
 		);
 	}

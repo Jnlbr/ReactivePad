@@ -5,9 +5,11 @@ import {
   Text,
   Animated,
   PanResponder,
-  Dimensions
+  Dimensions,
+  TouchableOpacity,
+  ToastAndroid
 } from 'react-native';
-import { Card,Button } from 'react-native-elements';
+import { Card,Button,Icon } from 'react-native-elements';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
@@ -69,8 +71,10 @@ export default class Note extends Component {
         })
       }, 100);
     }
-    else
+    else{
       onSwipeLeft()
+    }
+      
   }
 
   getNoteStyle() {
@@ -91,27 +95,31 @@ export default class Note extends Component {
         style={this.getNoteStyle()}
         {...this.panResponder.panHandlers}
       >
-          <Card>
+          <Card containerStyle={{borderRadius:4, marginHorizontal: 25}}>
             <View style={styles.titleview}>
-              <Text>{this.props.note.title}</Text>
-              <Button
-                icon={{ name: 'title', color: 'black' }}
-                buttonStyle={styles.button}
-                onPress={this.props.onEdit}
-              />
+              <Text style={styles.titleText}>{this.props.note.title}</Text>
             </View>
-            <Text
-              numberOfLines={3}
-              style={styles.text}>
-              {this.props.note.text}
-            </Text>
+            {(this.props.note.type == 'text') ? (
+              <Text
+                numberOfLines={3}
+                style={styles.text}>
+                {this.props.note.text}
+              </Text>
+            ):(
+              <Icon name='picture-o'
+                type='font-awesome'
+                size={40}
+                containerStyle={{paddingVertical: 10}}/>
+            )
+            } 
             <View style={styles.footer}>
-              <Text>{this.props.note.date}</Text>
-              <Button
-                icon={{ name: 'delete', color: 'black' }}
-                buttonStyle={styles.button}
-                onPress={this.props.onDelete}
-              />
+              <Text style={styles.text}>{this.props.note.date}</Text>
+              <TouchableOpacity style={styles.ButtonEdit}
+                onPress={this.props.onDelete}>
+                <Icon 
+                  name='delete'
+                  iconStyle={styles.actionButtonIcon}/>
+              </TouchableOpacity>
             </View>
           </Card>
       </Animated.View>
@@ -129,7 +137,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },text:{
         color: 'gray',
-        marginVertical: 5
+        marginVertical: 5,
+        fontSize: 14
+    },titleText:{
+      fontSize: 18,
     },button:{
         width: 30,
         height:20,
