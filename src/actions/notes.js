@@ -3,9 +3,22 @@ import {
   DELETE_NOTE,
   EDIT_NOTE,
   GET_NOTE,
-  SET_NOTES
+  SET_NOTES,
+  DID_UNDO,
+  DID_NOT_UNDO
 } from '../constants/notes';
 import { getItem, setItem } from '../helpers/storage';
+
+export const didUndo = () => {
+  return {
+    type: DID_UNDO,
+  }
+}
+export const didNotUndo = () => {
+  return {
+    type: DID_NOT_UNDO,
+  }
+}
 
 export const addNote = (noteType) => {
   const id = String(Date.now() + Math.random());

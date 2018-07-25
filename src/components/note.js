@@ -10,12 +10,14 @@ import {
   ToastAndroid
 } from 'react-native';
 import { Card,Button,Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { didNotUndo } from '../actions/notes';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 300;
 
-export default class Note extends Component {
+class Note extends Component {
   constructor(props) {
     super(props);
       
@@ -38,6 +40,10 @@ export default class Note extends Component {
         }
       },
     });
+
+    this.state = {
+      deleted: false,
+    }
   }
 
   resetPosition() {
@@ -71,10 +77,22 @@ export default class Note extends Component {
         })
       }, 100);
     }
-    else{
-      onSwipeLeft()
+    else {
+      this.setState({ deleted: true });
+      onSwipeLeft();
+      // setTimeout(() => {
+      //   console.log(this.props.undo)
+      //   if(this.props.undo) {
+      //     Animated.spring(this.position, {
+      //       toValue: {
+      //         x: 0,
+      //         y: 0
+      //       }
+      //     }).start();
+      //     this.props.didNotUndo();
+      //   }
+      // }, 2500);
     }
-      
   }
 
   getNoteStyle() {
@@ -89,7 +107,21 @@ export default class Note extends Component {
     };
   }
 
-  render(){
+  componentDidUpdate(prevProps) {
+    if (this.props.undo && !prevProps.undo && this.state.deleted) {
+      if (this.props.undo) {
+        Animated.spring(this.position, {
+          toValue: {
+            x: 0,
+            y: 0
+          }
+        }).start();
+        this.setState({ deleted: false });
+      }
+    }
+  }
+
+  render() {
     return(
       <Animated.View 
         style={this.getNoteStyle()}
@@ -126,6 +158,17 @@ export default class Note extends Component {
     );
   }
 }
+const mapStateToPros = state => {
+  return {
+    undo: state.undo
+  };
+}
+const mapDispatchToProps = dispatch => ({
+  didNotUndo: () => {
+    dispatch(didNotUndo())
+  }
+})
+export default connect(mapStateToPros,mapDispatchToProps)(Note)
 
 const styles = StyleSheet.create({
     titleview: {

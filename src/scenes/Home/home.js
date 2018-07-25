@@ -11,12 +11,16 @@ import { connect } from 'react-redux';
 import {
 	addNote,
 	deleteNote,
+	didUndo,
+	didNotUndo,
 } from '../../actions/notes';
 
 class Home extends Component {
 	
 	state = {
 		modalVisible: false,
+		timeout: true,
+		toDelete: [],
 	}
 	setModalVisible = (visible) => this.setState({modalVisible: visible})
 	navigateTo = (route) => () => this.props.navigation.push(route);
@@ -39,6 +43,34 @@ class Home extends Component {
 		  );
 		this.props.addNote(option);
 	}
+	deleteNote = (id) => {
+		this.setState({ 
+			timeout: false,
+			toDelete: [id, ...this.state.toDelete]
+		});
+		setTimeout(() => {
+			if(!this.props.undo) {
+				const { toDelete } = this.state;
+				this.setState({
+					timeout: true,
+					toDelete: [],
+				});				
+				toDelete.forEach(td => {
+					this.props.deleteNote(td);
+				})
+			} else {
+				this.props.didNotUndo();
+			}
+		}, 2500);
+
+	}
+	handleUndo = () => {		
+		this.props.didUndo();
+		this.setState({ 
+			timeout: true,
+			toDelete: [],
+		});
+	}
 
 	render() {
 		return (
@@ -49,13 +81,16 @@ class Home extends Component {
 					closeModal={() => this.setModalVisible(false)}
 				/>
 				<List 
-					notes={this.props.notes} 
+					notes={this.props.notes}
 					navigation={this.props.navigation} 
-					deleteNote={this.props.deleteNote}
+					deleteNote={this.deleteNote}
 					handleEdit={this.handleEdit}
 				/>
 				<Overlay
-					handleOption={this.handleOption}/>
+					handleOption={this.handleOption}
+					handleUndo={this.handleUndo}
+					timeout={this.state.timeout}
+				/>
 			</View>
 		);
 	}
@@ -63,6 +98,7 @@ class Home extends Component {
 
 const mapStateToProps = state => {
 	return {
+		undo: state.undo,
 		notes: state.notes,
 	}
 }
@@ -74,6 +110,12 @@ const mapDispatchToProps = dispatch => {
 		deleteNote: (id) => {
 			dispatch(deleteNote(id))
 		},
+		didUndo: () => {
+			dispatch(didUndo());
+		},
+		didNotUndo: () => {
+			dispatch(didNotUndo());
+		}
 	}
 }
 

@@ -12,15 +12,15 @@ import {
 
 class List extends React.Component {
 
-deleteFunct = (id) =>{
-  ToastAndroid.showWithGravity(
-    'Deleted Note',
-    ToastAndroid.SHORT,
-    ToastAndroid.CENTER
-    );
-  this.props.deleteNote(id);
-}
-  render(){
+  // deleteNote = (id) => {
+  //   ToastAndroid.showWithGravity(
+  //     'Deleted',
+  //     ToastAndroid.SHORT,
+  //     ToastAndroid.CENTER
+  //   );
+  //   this.props.deleteNote(id);
+  // }
+  render() {
     return (           
       <View style={{marginBottom: 5}}>
         <FlatList
@@ -31,8 +31,8 @@ deleteFunct = (id) =>{
               note={item}
               onEdit={() => this.props.handleEdit(item)}
               onSwipeRight={() => this.props.handleEdit(item)}
-              onDelete={() => this.deleteFunct(item.id)}
-              onSwipeLeft={() => this.deleteFunct(item.id)}
+              onDelete={() => this.props.deleteNote(item.id)}
+              onSwipeLeft={() => this.props.deleteNote(item.id)}
             />
           }
         />

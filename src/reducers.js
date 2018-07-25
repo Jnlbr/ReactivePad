@@ -4,15 +4,28 @@ import {
   EDIT_NOTE,
   GET_NOTE,
   SET_NOTES,
+  DID_UNDO,
+  DID_NOT_UNDO
 } from './constants/notes';
 
 const initialState = {
   notes: [],
-  note: {}
+  note: {},
+  undo: false,
 }
 
 export default (state = initialState, action) => {
   switch(action.type) {
+    case DID_UNDO: 
+      return {
+        ...state,
+        undo: true,
+      }
+    case DID_NOT_UNDO:
+      return {
+        ...state,
+        undo: false,
+      }
     case ADD_NOTE:
       return {
         ...state,
@@ -20,6 +33,7 @@ export default (state = initialState, action) => {
       }
     case DELETE_NOTE:
       return {
+        ...state,
         notes: state.notes.filter(note => note.id !== action.id)
       }
     case EDIT_NOTE:
@@ -33,10 +47,12 @@ export default (state = initialState, action) => {
         return note
       })
       return {
+        ...state,
         notes: notes,
       }
     case SET_NOTES:
       return {
+        ...state,
         notes: action.notes,
       }
     case GET_NOTE:
