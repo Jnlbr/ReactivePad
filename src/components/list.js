@@ -1,9 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, ToastAndroid} from 'react-native';
-import { Button } from 'react-native-elements'
+import { View, FlatList } from 'react-native';
 import Note from './note';
-import {NotesContext} from '../context';
-import { connect } from 'react-redux';
 import {
     addNote,
     deleteNote,
@@ -11,15 +8,6 @@ import {
 } from '../actions/notes';
 
 class List extends React.Component {
-
-  // deleteNote = (id) => {
-  //   ToastAndroid.showWithGravity(
-  //     'Deleted',
-  //     ToastAndroid.SHORT,
-  //     ToastAndroid.CENTER
-  //   );
-  //   this.props.deleteNote(id);
-  // }
   render() {
     return (           
       <View style={{marginBottom: 5}}>
